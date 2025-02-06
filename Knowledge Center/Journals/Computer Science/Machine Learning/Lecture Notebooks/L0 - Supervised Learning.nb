@@ -1,0 +1,571 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 13.2' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     21994,        563]
+NotebookOptionsPosition[     19742,        516]
+NotebookOutlinePosition[     20252,        533]
+CellTagsIndexPosition[     20209,        530]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["\<\
+Supervised
+Learning\
+\>", "Title",
+ CellChangeTimes->{{3.942298683187355*^9, 3.942298689323819*^9}, 
+   3.9422987960034647`*^9},ExpressionUUID->"95d3c62a-8172-4d38-a33d-\
+e61843963e8e"],
+
+Cell["\<\
+Lectures on
+Machine Learning\
+\>", "Subtitle",
+ CellChangeTimes->{{3.942298783930791*^9, 
+  3.942298792698083*^9}},ExpressionUUID->"d8f92d3b-0b5c-4cf1-a55f-\
+cb5dddd1c2c6"],
+
+Cell[CellGroupData[{
+
+Cell["Introduction", "Chapter",
+ CellChangeTimes->{{3.94229882669986*^9, 
+  3.942298830923066*^9}},ExpressionUUID->"3e1374dc-310a-4f9e-ae0d-\
+f25abb0bf9c4"],
+
+Cell[CellGroupData[{
+
+Cell["About the Presented Work", "Section",
+ CellChangeTimes->{{3.942299175083767*^9, 
+  3.942299184420117*^9}},ExpressionUUID->"8595701a-3b1d-4ff2-baf3-\
+a32a87432703"],
+
+Cell["\<\
+These notebooks are an interactive exploration of machine learning concepts, \
+primarily drawn from Stanford\[CloseCurlyQuote]s CS229 course (2022), \
+available online on platforms like YouTube. They include interactive, written \
+functions and methods taught in the course, aiming to enhance understanding \
+through hands-on engagement. Writing and implementing the material as \
+Mathematica notebooks facilitates better comprehension and retention. 
+
+In addition to these notebooks, a supplementary library in C/C++ and Kotlin \
+is provided, offering real-world implementations of the concepts covered. \
+These documents serve as a living reference to the lectures by Andrew Ng and \
+the updated notes by Tengyu Ma, based on the publicly available materials. \
+All credit for the original content belongs to the instructors and the \
+Stanford CS229 course.\
+\>", "Text",
+ CellChangeTimes->{{3.942299099453929*^9, 3.942299351982822*^9}, {
+   3.942299518014476*^9, 3.942299666276967*^9}, 
+   3.942299796513242*^9},ExpressionUUID->"bf711dad-338c-436e-a672-\
+41ae4f871d6e"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Overview", "Section",
+ CellChangeTimes->{{3.94229981363109*^9, 
+  3.9422998145201483`*^9}},ExpressionUUID->"419003ab-56e6-4985-9e73-\
+84552b76fbe3"],
+
+Cell[CellGroupData[{
+
+Cell["Definition of Supervised Learning", "Subsection",
+ CellChangeTimes->{{3.942299821722197*^9, 
+  3.9422998400279217`*^9}},ExpressionUUID->"cfab6cc0-dc91-4ae6-9f2a-\
+9cfe33659438"],
+
+Cell[TextData[{
+ "Suppose we have a dataset giving the living areas and prices of ",
+ Cell[BoxData[
+  FormBox[
+   TemplateBox[<|"boxes" -> FormBox[
+       StyleBox["n", "TI"], TraditionalForm], "errors" -> {}, "input" -> "n", 
+     "state" -> "Boxes"|>,
+    "TeXAssistantTemplate"], TraditionalForm]],ExpressionUUID->
+  "37438d02-2caa-426a-a9a9-d6cc0ac05fac"],
+ " houses from Portland, Oregon:"
+}], "Text",
+ CellChangeTimes->{{3.942299846520549*^9, 
+  3.942299890765224*^9}},ExpressionUUID->"616df45c-6041-4800-a012-\
+31d6a35de306"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"dataSet", " ", "=", " ", 
+   RowBox[{"{", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"2104", ",", "400"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"1600", ",", "330"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"2400", ",", "369"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"1416", ",", "232"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"3000", ",", "540"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"2430", ",", "340"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"2153", ",", "440"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"2200", ",", "432"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"1502", ",", "231"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"3100", ",", "500"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"2300", ",", "412"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"1100", ",", "234"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"1230", ",", "321"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"2034", ",", "420"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"2304", ",", "430"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"2404", ",", "341"}], "}"}]}], "\[IndentingNewLine]", "}"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{"ListPlot", "[", 
+  RowBox[{"dataSet", ",", 
+   RowBox[{"PlotStyle", "->", "Purple"}], ",", 
+   RowBox[{"PlotMarkers", "->", 
+    RowBox[{"{", 
+     RowBox[{"\"\<\[FilledCircle]\>\"", ",", 
+      RowBox[{"Thickness", "[", "Tiny", "]"}]}], "}"}]}], ",", 
+   RowBox[{"AxesLabel", "->", 
+    RowBox[{"{", 
+     RowBox[{"\"\<Square Feet\>\"", ",", "\"\<Price in $1000\>\""}], "}"}]}], 
+   ",", 
+   RowBox[{"PlotRange", "->", "All"}]}], "]"}]}], "Input",
+ CellChangeTimes->{{3.942299895500033*^9, 3.942300000592903*^9}, {
+  3.942300557278911*^9, 3.942300643877659*^9}, {3.9423006938376303`*^9, 
+  3.942300746498958*^9}, {3.942300798073442*^9, 3.942300832697858*^9}},
+ CellLabel->"In[17]:=",ExpressionUUID->"74c208cc-3a86-4a53-973d-488f017b383c"],
+
+Cell[BoxData[
+ GraphicsBox[{{}, 
+   {RGBColor[0.5, 0, 0.5], PointSize[0.012833333333333334`], 
+    AbsoluteThickness[1.6], GeometricTransformationBox[
+     TagBox[InsetBox["\[FilledCircle]", {0., 0.}],
+      "InsetString"], {{{2104., 400.}}, {{1600., 330.}}, {{2400., 369.}}, {{
+     1416., 232.}}, {{3000., 540.}}, {{2430., 340.}}, {{2153., 440.}}, {{
+     2200., 432.}}, {{1502., 231.}}, {{3100., 500.}}, {{2300., 412.}}, {{
+     1100., 234.}}, {{1230., 321.}}, {{2034., 420.}}, {{2304., 430.}}, {{
+     2404., 341.}}}]}, {{}, {}}},
+  AspectRatio->NCache[GoldenRatio^(-1), 0.6180339887498948],
+  Axes->{True, True},
+  AxesLabel->{
+    FormBox[
+     TagBox["\"Square Feet\"", HoldForm], TraditionalForm], 
+    FormBox[
+     TagBox["\"Price in $1000\"", HoldForm], TraditionalForm]},
+  AxesOrigin->{1058.3333333333358`, 0},
+  DisplayFunction->Identity,
+  Frame->{{False, False}, {False, False}},
+  FrameLabel->{{None, None}, {None, None}},
+  FrameTicks->{{Automatic, Automatic}, {Automatic, Automatic}},
+  GridLines->{None, None},
+  GridLinesStyle->Directive[
+    GrayLevel[0.5, 0.4]],
+  ImageSize->{612., Automatic},
+  Method->{
+   "AxisPadding" -> Scaled[0.02], "DefaultBoundaryStyle" -> Automatic, 
+    "DefaultGraphicsInteraction" -> {
+     "Version" -> 1.2, "TrackMousePosition" -> {True, False}, 
+      "Effects" -> {
+       "Highlight" -> {"ratio" -> 2}, "HighlightPoint" -> {"ratio" -> 2}, 
+        "Droplines" -> {
+         "freeformCursorMode" -> True, 
+          "placement" -> {"x" -> "All", "y" -> "None"}}}}, "DefaultMeshStyle" -> 
+    AbsolutePointSize[6], "DefaultPlotStyle" -> {
+      Directive[
+       RGBColor[0.368417, 0.506779, 0.709798], 
+       AbsoluteThickness[1.6]], 
+      Directive[
+       RGBColor[0.880722, 0.611041, 0.142051], 
+       AbsoluteThickness[1.6]], 
+      Directive[
+       RGBColor[0.560181, 0.691569, 0.194885], 
+       AbsoluteThickness[1.6]], 
+      Directive[
+       RGBColor[0.922526, 0.385626, 0.209179], 
+       AbsoluteThickness[1.6]], 
+      Directive[
+       RGBColor[0.528488, 0.470624, 0.701351], 
+       AbsoluteThickness[1.6]], 
+      Directive[
+       RGBColor[0.772079, 0.431554, 0.102387], 
+       AbsoluteThickness[1.6]], 
+      Directive[
+       RGBColor[0.363898, 0.618501, 0.782349], 
+       AbsoluteThickness[1.6]], 
+      Directive[
+       RGBColor[1, 0.75, 0], 
+       AbsoluteThickness[1.6]], 
+      Directive[
+       RGBColor[0.647624, 0.37816, 0.614037], 
+       AbsoluteThickness[1.6]], 
+      Directive[
+       RGBColor[0.571589, 0.586483, 0.], 
+       AbsoluteThickness[1.6]], 
+      Directive[
+       RGBColor[0.915, 0.3325, 0.2125], 
+       AbsoluteThickness[1.6]], 
+      Directive[
+       RGBColor[0.40082222609352647`, 0.5220066643438841, 0.85], 
+       AbsoluteThickness[1.6]], 
+      Directive[
+       RGBColor[0.9728288904374106, 0.621644452187053, 0.07336199581899142], 
+       AbsoluteThickness[1.6]], 
+      Directive[
+       RGBColor[0.736782672705901, 0.358, 0.5030266573755369], 
+       AbsoluteThickness[1.6]], 
+      Directive[
+       RGBColor[0.28026441037696703`, 0.715, 0.4292089322474965], 
+       AbsoluteThickness[1.6]]}, "DomainPadding" -> Scaled[0.02], 
+    "PointSizeFunction" -> "SmallPointSize", "RangePadding" -> Scaled[0.05], 
+    "OptimizePlotMarkers" -> True, "OptimizePlotMarkers" -> True, 
+    "CoordinatesToolOptions" -> {"DisplayFunction" -> ({
+        Identity[
+         Part[#, 1]], 
+        Identity[
+         Part[#, 2]]}& ), "CopiedValueFunction" -> ({
+        Identity[
+         Part[#, 1]], 
+        Identity[
+         Part[#, 2]]}& )}},
+  PlotRange->{{1058.3333333333358`, 3100.}, {0, 540.}},
+  PlotRangeClipping->True,
+  PlotRangePadding->{{
+     Scaled[0.02], 
+     Scaled[0.02]}, {
+     Scaled[0.02], 
+     Scaled[0.05]}},
+  Ticks->{Automatic, Automatic}]], "Output",
+ CellChangeTimes->{
+  3.94230063691605*^9, {3.9423007255099163`*^9, 3.942300735134419*^9}, {
+   3.942300802187751*^9, 3.942300833258987*^9}},
+ CellLabel->"Out[18]=",ExpressionUUID->"3d373bc8-01db-4a40-84cc-d9c91a480b31"]
+}, Open  ]],
+
+Cell[TextData[{
+ "How can we learn to predict the price of other houses that are note \
+mentioned as a function of their sizes? To establish notation for future use, \
+we\[CloseCurlyQuote]ll use ",
+ Cell[BoxData[
+  FormBox[
+   TemplateBox[<|"boxes" -> FormBox[
+       SuperscriptBox[
+        StyleBox["x", "TI"], 
+        RowBox[{"(", 
+          StyleBox["i", "TI"], ")"}]], TraditionalForm], "errors" -> {}, 
+     "input" -> "x^{(i)}", "state" -> "Boxes"|>,
+    "TeXAssistantTemplate"], TraditionalForm]],ExpressionUUID->
+  "ec2936fe-2a54-471a-9fed-c0aed1d34c0d"],
+ " to denote the input variables, also called input ",
+ StyleBox["features",
+  FontSlant->"Italic"],
+ ", and ",
+ Cell[BoxData[
+  FormBox[
+   TemplateBox[<|"boxes" -> FormBox[
+       SuperscriptBox[
+        StyleBox["y", "TI"], 
+        RowBox[{"(", 
+          StyleBox["i", "TI"], ")"}]], TraditionalForm], "errors" -> {}, 
+     "input" -> "y^{(i)}", "state" -> "Boxes"|>,
+    "TeXAssistantTemplate"], TraditionalForm]],ExpressionUUID->
+  "3213c5df-59a1-4672-af61-aa4f3379778a"],
+ " to denote the output or ",
+ StyleBox["target",
+  FontSlant->"Italic"],
+ " variable that we arey trying to predict. Each pair that we have in dataSet \
+is called a ",
+ StyleBox["training example",
+  FontSlant->"Italic"],
+ ". The set of all training examples is the ",
+ StyleBox["training set.",
+  FontSlant->"Italic"],
+ " \n\nWe would also denote the space of input values (space of acceptable \
+inputs) and space of output values (space of acceptable outputs) as ",
+ Cell[BoxData[
+  FormBox[
+   TemplateBox[<|"boxes" -> FormBox[
+       StyleBox["X", "TI"], TraditionalForm], "errors" -> {}, "input" -> "X", 
+     "state" -> "Boxes"|>,
+    "TeXAssistantTemplate"], TraditionalForm]],ExpressionUUID->
+  "200a36ee-5c6f-4b13-921c-12c08a232fe7"],
+ ", and ",
+ Cell[BoxData[
+  FormBox[
+   TemplateBox[<|"boxes" -> FormBox[
+       StyleBox["Y", "TI"], TraditionalForm], "errors" -> {}, "input" -> "Y", 
+     "state" -> "Boxes"|>,
+    "TeXAssistantTemplate"], TraditionalForm]],ExpressionUUID->
+  "e27f9685-9860-4612-b57b-cc074cd561cd"],
+ " respectively."
+}], "Text",
+ CellChangeTimes->{{3.94230084378736*^9, 3.942301128912396*^9}, {
+  3.942301162246574*^9, 
+  3.942301175954652*^9}},ExpressionUUID->"26cc6b0b-299c-4461-acf6-\
+3018ed0c3a1c"],
+
+Cell[CellGroupData[{
+
+Cell["Formal Definition of Supervised Learning", "Subsubsection",
+ CellChangeTimes->{{3.94230119030928*^9, 
+  3.942301207573289*^9}},ExpressionUUID->"b9d79e8d-e3f9-4d25-a374-\
+1ad049ec8f89"],
+
+Cell[TextData[{
+ StyleBox["Given a ",
+  FontWeight->"Bold"],
+ StyleBox["training set",
+  FontWeight->"Bold",
+  FontSlant->"Italic"],
+ StyleBox[", learn a function ",
+  FontWeight->"Bold"],
+ Cell[BoxData[
+  FormBox[
+   TemplateBox[<|"boxes" -> FormBox[
+       RowBox[{
+         StyleBox["h", "TI"], ":", 
+         StyleBox["X", "TI"], "\[Rule]", 
+         StyleBox["Y", "TI"]}], TraditionalForm], "errors" -> {}, "input" -> 
+     "h: X\\rightarrow Y", "state" -> "Boxes"|>,
+    "TeXAssistantTemplate"], TraditionalForm]],
+  FontWeight->"Bold",ExpressionUUID->"76918c40-359c-4fa0-a32e-2f1afacfc75b"],
+ StyleBox[" so that ",
+  FontWeight->"Bold"],
+ Cell[BoxData[
+  FormBox[
+   TemplateBox[<|"boxes" -> FormBox[
+       RowBox[{
+         StyleBox["h", "TI"], "(", 
+         StyleBox["x", "TI"], ")"}], TraditionalForm], "errors" -> {}, 
+     "input" -> "h(x)", "state" -> "Boxes"|>,
+    "TeXAssistantTemplate"], TraditionalForm]],
+  FontWeight->"Bold",ExpressionUUID->"b2fc7e59-5715-4547-9894-d2c4c57afc68"],
+ StyleBox[" is a good predictor for the corresponding value of ",
+  FontWeight->"Bold"],
+ Cell[BoxData[
+  FormBox[
+   TemplateBox[<|"boxes" -> FormBox[
+       StyleBox["y", "TI"], TraditionalForm], "errors" -> {}, "input" -> "y", 
+     "state" -> "Boxes"|>,
+    "TeXAssistantTemplate"], TraditionalForm]],
+  FontWeight->"Bold",ExpressionUUID->"7bced5eb-2767-41b2-91bc-afeec1d7ceb1"],
+ StyleBox[". ",
+  FontWeight->"Bold"]
+}], "Text",
+ CellChangeTimes->{{3.942301199971901*^9, 
+  3.942301261140356*^9}},ExpressionUUID->"2aad9a1f-a2ea-4f7d-87d2-\
+c8c9ed50f74e"],
+
+Cell[TextData[{
+ "For historical reasons this function is called the ",
+ StyleBox["hypothesis",
+  FontSlant->"Italic"],
+ ". The process is therefore like below:"
+}], "Text",
+ CellChangeTimes->{{3.942301268782498*^9, 
+  3.942301297586852*^9}},ExpressionUUID->"6a04cf6d-3080-43d8-84d0-\
+b70384d628e5"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Graph", "[", 
+  RowBox[{
+   RowBox[{"{", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"Labeled", "[", 
+      RowBox[{"1", ",", "\"\<Training Set\>\""}], "]"}], ",", 
+     "\[IndentingNewLine]", 
+     RowBox[{"Labeled", "[", 
+      RowBox[{"2", ",", " ", "\"\<Learning Algorithm\>\""}], "]"}], ",", 
+     "\[IndentingNewLine]", 
+     RowBox[{"Labeled", "[", 
+      RowBox[{"3", ",", "\"\<\!\(\*TemplateBox[<|\"boxes\" -> FormBox[
+StyleBox[\"h\", \"TI\"], TraditionalForm], \"errors\" -> {}, \"input\" -> \"h\
+\", \"state\" -> \"Boxes\"|>,\"TeXAssistantTemplate\"]\)\>\""}], "]"}], ",", 
+     "\[IndentingNewLine]", 
+     RowBox[{"Labeled", "[", 
+      RowBox[{"4", ",", "\"\<\!\(\*TemplateBox[<|\"boxes\" -> FormBox[
+StyleBox[\"x\", \"TI\"], TraditionalForm], \"errors\" -> {}, \"input\" -> \"x\
+\", \"state\" -> \"Boxes\"|>,\"TeXAssistantTemplate\"]\)\>\""}], "]"}], ",", 
+     "\[IndentingNewLine]", 
+     RowBox[{"Labeled", "[", 
+      RowBox[{"5", ",", "\"\<\!\(\*TemplateBox[<|\"boxes\" -> FormBox[
+StyleBox[\"y\", \"TI\"], TraditionalForm], \"errors\" -> {}, \"input\" -> \"y\
+\", \"state\" -> \"Boxes\"|>,\"TeXAssistantTemplate\"]\)\>\""}], "]"}]}], 
+    "\[IndentingNewLine]", "}"}], ",", " ", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"1", "->", "2"}], ",", " ", 
+     RowBox[{"2", "->", "3"}], ",", " ", 
+     RowBox[{"4", "->", "3"}], ",", " ", 
+     RowBox[{"3", "->", "5"}]}], "}"}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.942301613186584*^9, 3.942301636176777*^9}, {
+  3.942301675951147*^9, 3.942301751118269*^9}},
+ CellLabel->"In[39]:=",ExpressionUUID->"f8e1dec8-61f4-42fd-91f8-2b77b9227760"],
+
+Cell[BoxData[
+ GraphicsBox[
+  NamespaceBox["NetworkGraphics",
+   DynamicModuleBox[{Typeset`graph = HoldComplete[
+     Graph[{1, 2, 3, 4, 5}, {{{1, 2}, {2, 3}, {4, 3}, {3, 5}}, Null}, {
+      VertexLabels -> {
+        3 -> "\!\(\*TemplateBox[<|\"boxes\" -> FormBox[StyleBox[\"h\", \
+\"TI\"], TraditionalForm], \"errors\" -> {}, \"input\" -> \"h\", \"state\" -> \
+\"Boxes\"|>,\"TeXAssistantTemplate\"]\)", 5 -> 
+         "\!\(\*TemplateBox[<|\"boxes\" -> FormBox[StyleBox[\"y\", \"TI\"], \
+TraditionalForm], \"errors\" -> {}, \"input\" -> \"y\", \"state\" -> \
+\"Boxes\"|>,\"TeXAssistantTemplate\"]\)", 4 -> 
+         "\!\(\*TemplateBox[<|\"boxes\" -> FormBox[StyleBox[\"x\", \"TI\"], \
+TraditionalForm], \"errors\" -> {}, \"input\" -> \"x\", \"state\" -> \
+\"Boxes\"|>,\"TeXAssistantTemplate\"]\)", 2 -> "Learning Algorithm", 1 -> 
+         "Training Set"}}]]}, 
+    TagBox[GraphicsGroupBox[{
+       {Hue[0.6, 0.7, 0.5], Opacity[0.7], Arrowheads[Medium], 
+        ArrowBox[{{0., 3.}, {0., 2.}}, 0.030239520958083826`], 
+        ArrowBox[{{0., 2.}, {1., 1.}}, 0.030239520958083826`], 
+        ArrowBox[{{1., 1.}, {1., 0.}}, 0.030239520958083826`], 
+        ArrowBox[{{1., 2.}, {1., 1.}}, 0.030239520958083826`]}, 
+       {Hue[0.6, 0.2, 0.8], EdgeForm[{GrayLevel[0], Opacity[
+        0.7]}], {DiskBox[{0., 3.}, 0.030239520958083826], 
+         InsetBox["\<\"Training Set\"\>", 
+          Offset[{2, 2}, {0.030239520958083826, 3.0302395209580837}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {DiskBox[{0., 2.}, 0.030239520958083826], 
+         InsetBox["\<\"Learning Algorithm\"\>", 
+          Offset[{2, 2}, {0.030239520958083826, 2.0302395209580837}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {DiskBox[{1., 1.}, 0.030239520958083826], 
+         InsetBox["\<\"\\!\\(\\*TemplateBox[<|\\\"boxes\\\" -> \
+FormBox[StyleBox[\\\"h\\\", \\\"TI\\\"], TraditionalForm], \\\"errors\\\" -> \
+{}, \\\"input\\\" -> \\\"h\\\", \\\"state\\\" -> \
+\\\"Boxes\\\"|>,\\\"TeXAssistantTemplate\\\"]\\)\"\>", 
+          Offset[{2, 2}, {1.030239520958084, 1.030239520958084}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {DiskBox[{1., 2.}, 0.030239520958083826], 
+         InsetBox["\<\"\\!\\(\\*TemplateBox[<|\\\"boxes\\\" -> \
+FormBox[StyleBox[\\\"x\\\", \\\"TI\\\"], TraditionalForm], \\\"errors\\\" -> \
+{}, \\\"input\\\" -> \\\"x\\\", \\\"state\\\" -> \
+\\\"Boxes\\\"|>,\\\"TeXAssistantTemplate\\\"]\\)\"\>", 
+          Offset[{2, 2}, {1.030239520958084, 2.0302395209580837}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {DiskBox[{1., 0.}, 0.030239520958083826], 
+         InsetBox["\<\"\\!\\(\\*TemplateBox[<|\\\"boxes\\\" -> \
+FormBox[StyleBox[\\\"y\\\", \\\"TI\\\"], TraditionalForm], \\\"errors\\\" -> \
+{}, \\\"input\\\" -> \\\"y\\\", \\\"state\\\" -> \
+\\\"Boxes\\\"|>,\\\"TeXAssistantTemplate\\\"]\\)\"\>", 
+          Offset[{2, 2}, {1.030239520958084, 0.030239520958083826}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}}}],
+     MouseAppearanceTag["NetworkGraphics"]],
+    AllowKernelInitialization->False]],
+  DefaultBaseStyle->"NetworkGraphics",
+  FormatType->TraditionalForm,
+  FrameTicks->None]], "Output",
+ CellChangeTimes->{3.942301624028735*^9, 3.9423017520541077`*^9},
+ CellLabel->"Out[39]=",ExpressionUUID->"ec2f61e9-a6eb-4827-9002-8b111b72425b"]
+}, Open  ]],
+
+Cell[TextData[{
+ "When the target variable that we\[CloseCurlyQuote]re trying to predict is \
+continuous, such as our housing example, we call the learning problem a ",
+ StyleBox["regression problem. ",
+  FontSlant->"Italic"],
+ "When ",
+ Cell[BoxData[
+  FormBox[
+   TemplateBox[<|"boxes" -> FormBox[
+       StyleBox["y", "TI"], TraditionalForm], "errors" -> {}, "input" -> "y", 
+     "state" -> "Boxes"|>,
+    "TeXAssistantTemplate"], TraditionalForm]],ExpressionUUID->
+  "e1eed10f-a7b8-47b5-b2cd-a6257607774f"],
+ " can take only a small number of discrete values, we call it a ",
+ StyleBox["classification problem.",
+  FontSlant->"Italic"]
+}], "Text",
+ CellChangeTimes->{{3.942301811881085*^9, 3.9423018425232353`*^9}, {
+   3.942301928951333*^9, 3.9423019646636972`*^9}, 
+   3.942302012745162*^9},ExpressionUUID->"5b272433-66ec-4d63-a56b-\
+f4689b147b2a"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+},
+WindowSize->{1440., 755.25},
+WindowMargins->{{0, Automatic}, {Automatic, 0}},
+FrontEndVersion->"13.2 for Linux x86 (64-bit) (November 18, 2022)",
+StyleDefinitions->FrontEnd`FileName[{$RootDirectory, "home", "kid-a", 
+   "mathematica-styles"}, "stylesheet.nb", CharacterEncoding -> "UTF-8"],
+ExpressionUUID->"2e0f90aa-5e77-42f6-9651-263dd50a5561"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[580, 22, 195, 6, 252, "Title",ExpressionUUID->"95d3c62a-8172-4d38-a33d-e61843963e8e"],
+Cell[778, 30, 182, 6, 107, "Subtitle",ExpressionUUID->"d8f92d3b-0b5c-4cf1-a55f-cb5dddd1c2c6"],
+Cell[CellGroupData[{
+Cell[985, 40, 156, 3, 89, "Chapter",ExpressionUUID->"3e1374dc-310a-4f9e-ae0d-f25abb0bf9c4"],
+Cell[CellGroupData[{
+Cell[1166, 47, 169, 3, 73, "Section",ExpressionUUID->"8595701a-3b1d-4ff2-baf3-a32a87432703"],
+Cell[1338, 52, 1081, 18, 187, "Text",ExpressionUUID->"bf711dad-338c-436e-a672-41ae4f871d6e"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[2456, 75, 154, 3, 73, "Section",ExpressionUUID->"419003ab-56e6-4985-9e73-84552b76fbe3"],
+Cell[CellGroupData[{
+Cell[2635, 82, 183, 3, 60, "Subsection",ExpressionUUID->"cfab6cc0-dc91-4ae6-9f2a-9cfe33659438"],
+Cell[2821, 87, 532, 13, 38, "Text",ExpressionUUID->"616df45c-6041-4800-a012-31d6a35de306"],
+Cell[CellGroupData[{
+Cell[3378, 104, 2014, 53, 167, "Input",ExpressionUUID->"74c208cc-3a86-4a53-973d-488f017b383c"],
+Cell[5395, 159, 4007, 103, 367, "Output",ExpressionUUID->"3d373bc8-01db-4a40-84cc-d9c91a480b31"]
+}, Open  ]],
+Cell[9417, 265, 2281, 60, 142, "Text",ExpressionUUID->"26cc6b0b-299c-4461-acf6-3018ed0c3a1c"],
+Cell[CellGroupData[{
+Cell[11723, 329, 190, 3, 52, "Subsubsection",ExpressionUUID->"b9d79e8d-e3f9-4d25-a374-1ad049ec8f89"],
+Cell[11916, 334, 1563, 43, 39, "Text",ExpressionUUID->"2aad9a1f-a2ea-4f7d-87d2-c8c9ed50f74e"],
+Cell[13482, 379, 299, 8, 37, "Text",ExpressionUUID->"6a04cf6d-3080-43d8-84d0-b70384d628e5"],
+Cell[CellGroupData[{
+Cell[13806, 391, 1639, 34, 200, "Input",ExpressionUUID->"f8e1dec8-61f4-42fd-91f8-2b77b9227760"],
+Cell[15448, 427, 3360, 59, 449, "Output",ExpressionUUID->"ec2f61e9-a6eb-4827-9002-8b111b72425b"]
+}, Open  ]],
+Cell[18823, 489, 855, 20, 63, "Text",ExpressionUUID->"5b272433-66ec-4d63-a56b-f4689b147b2a"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+

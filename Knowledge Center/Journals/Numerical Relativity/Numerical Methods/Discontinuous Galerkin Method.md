@@ -150,4 +150,3 @@ In this example, we:
 - **Approximated the solution** within each element using local basis functions.
 - Introduced **numerical fluxes** and **penalty terms** to handle discontinuities at the interfaces.
 - Solved the system of equations and plotted the **discontinuous solution**.
-

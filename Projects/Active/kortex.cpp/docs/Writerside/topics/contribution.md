@@ -1,3 +1,0 @@
-# Contribution
-
-Start typing here...

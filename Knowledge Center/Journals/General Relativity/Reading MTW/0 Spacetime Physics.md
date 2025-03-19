@@ -8,5 +8,7 @@ sticker: lucide//newspaper
  [[3 Local Lorentz Geometry, With and Without Coordinates]]
  [[4 Time]]
  [[5 Curvature]]
+ [[6 Effect of Mass on Curvature]]
+
 
 
